@@ -1,0 +1,473 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+{% block content %}
+<!--main content-->
+
+<section>
+	<div class="container">
+		<div class="row">
+			<!--left part-->
+			<div class="col-sm-3">
+				<div class="left-sidebar">
+					<!--Profile Navbar-->
+					<div class="panel-group category-products" id="accordian">
+						<div class="row">
+                            <div class="col-sm-5" style="padding-left: 30px; margin-top: 8%;">
+                              <div class="view-product">
+                                <img src="{{profile.profile_image.url}}" alt="" style="display: block; width: 100%; border-radius: 50%; height: 80px; aspect-ratio: 1/1;" />
+                              </div>
+                            </div>
+                            <div class="col-sm-7" style="padding: 10px;">
+                              <h6>Hello!</h6>
+                              <h4>{{profile.user.username|capfirst}}</h4>
+                            </div>
+                        </div>
+                    </div>
+					
+					<!-- Account Setting -->
+                    <hr style="margin-top:10px;">
+					<div class="brands_products">
+						<div class="brands-name">
+							<div class=row>
+								<div class="col-sm-3" style="padding-left: 30px;">
+									<div class="view-product">
+										<i class="fa fa-user" style="font-size: x-large; color:#ff5877"></i>
+									</div>
+								</div>
+								<div class="col-sm-9" style="padding:0px;">
+									<h5 style="font-size:medium; margin-top:5px; color:#878787;">ACCOUNT SETTING</h5>
+								</div>
+							</div>
+                            
+							<hr style="margin-top:4px;">
+							<div class="row">
+                                <div class="col-sm-3" style="padding-left: 30px;"></div>
+                                <div class="col-sm-9" style="padding: 0px;">
+                                  <h4 style="margin-top: 4px;">
+                                    <a href="#Profile_information" class="clickable-link" >Profile Information</a>
+                                  </h4>
+                                </div>
+                            </div>
+							<hr style="margin-top:10px;">
+							<div class=row>
+								<div class="col-sm-3" style="padding-left: 30px; padding-top:6px;">
+									<div class="view-product">
+										{% comment %} <i class="fa fa-user" style="font-size: x-large;"></i>
+										{% endcomment %}
+										<svg width="26" height="26" class="" viewBox="0 0 24 24"
+											xmlns="http://www.w3.org/2000/svg">
+											<path fill="#ff5877" stroke-width="0.3" stroke="#ff5877"
+												d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z">
+											</path>
+										</svg>
+									</div>
+								</div>
+								<div class="col-sm-9" style="padding:0px;">
+									<h5 style="margin-top:4px;"><a href="{% url 'logouthandle' %}"
+											style="font-size:medium; margin-top:4px; color:#878787; padding-left:0px;">
+											Logout</a></h5>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<!-- Account Setting -->
+
+
+					<!-- Ads -->
+                    <div class="widget no-container rounded text-md-center" style="margin-top: 4%;">
+                        <span class="ads-title">- Sponsored Ad -</span>
+                        <a href="#" class="widget-ads">
+                            <img src="{% static 'images/ads/ad-360.png' %}" alt="Advertisement" />	
+                        </a>
+                    </div>
+					<!-- Ads -->
+
+				</div>
+			</div>
+			<!--left part-->
+
+            <!--right part-->
+            <!--profile section-->
+            <div class="col-sm-9">
+			    <div id="Profile_information" >
+                    <!-- Add content for Profile Information section here -->
+                    <div class="col-sm-9 padding-right">
+                        <div class="left-sidebar">
+                            <div class="panel-group category-products" id="accordian">
+                                <!-- image -->
+                                <div class="upload-image" style="padding: 4% 0% 4% 4%;">
+                                    <form id="upload-image-form" method="post" action="{% url 'profile_image_upload' %}" enctype="multipart/form-data" onsubmit="submitForm(event);">
+                                        {% csrf_token %}
+                                        <label for="imageUpload" style="display: inline-block; margin-top: 10px;">
+                                            <div id="choosePhotoBtn" style="padding: 5px; border: 1px solid #FE4F70;
+                                                                             border-radius: 5px; color: #FE4F70;
+                                                                             text-decoration: none; cursor: pointer; 
+                                                                             background-color: white; transition: background-color 0.3s, color 0.3s;"
+                                                 onmouseover="this.style.backgroundColor='#FE4F70'; 
+                                                             this.style.color='white';" 
+                                                 onmouseout="this.style.backgroundColor='white'; 
+                                                             this.style.color='#FE4F70';">
+                                                Choose a Photo
+                                            </div>
+                                            <input id="imageUpload" type="file" name="profile_photo" required="" capture style="display: none;" onchange="submitForm(event);">
+                                        </label>
+                                    </form>
+                                </div>
+                                <!-- scripts for auto submit form when select image -->
+                                <script>
+                                    function submitForm(event) {
+                                        event.preventDefault(); 
+                                        document.getElementById('upload-image-form').submit();
+                                         alert('Image uploaded successfully!');
+                                    }
+                                </script>
+                                <!-- image -->
+
+                                <!--Name and gender-->
+                                <div class="personal and gender">
+                                    <!--Personal Information-->
+                                    <div class="row" style="padding: 0px 0px 10px 0px;">
+                                        <h4 style="padding-left: 4%; display: inline;">Personal Information</h4>
+                                        <a id="editLink"
+                                            style="margin-left: 4%; color: #FE4F70; padding: 0px 10px; text-decoration: none; cursor: pointer; transition: color 0.3s;"
+                                            onclick="togglePersonalEditMode()">Edit</a>
+                                    </div>
+                                    <form id="profileForm" method="post" action="#">
+                                        {% csrf_token %}
+                                        <div class="row" style="padding-left: 4%;">
+                                            <div
+                                                style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 15px;">
+                                                <!--FirstName-->
+                                                <div style="width: 29%;">
+                                                    <div style="margin-bottom: 15px;">
+                                                        <div style="display: flex; flex-direction: column; position: relative;">
+                                                            <div style="position: relative;">
+                                                                <!--FirstName Label-->
+                                                                <label for="firstName" id="firstNameLabel"
+                                                                    style="font-size: 12px; color: #878787; font-weight: 500; position: absolute; top: 2px; left: 8px; background-color: white; padding: 4px 10px; display: none;">First
+                                                                    Name  
+                                                                </label>
+                                                                <!--Firstname Label-->
+                                                                <!--Firstname input-->
+                                                                <input id="firstNameInput" type="text"
+                                                                    style=" cursor: not-allowed; padding: 14px 0px 14px 20px; border: 1px solid #ccc; border-radius: 4px; transition: border-color 0.3s; width: 100%;"
+                                                                    name="firstname" required="" autocomplete="name" tabindex="1"
+                                                                    value="{{ profile.firstname|capfirst }}"
+                                                                    onmouseover="this.style.borderColor='#FE4F70'"
+                                                                    onmouseout="this.style.borderColor='#ccc'" disabled>
+                                                                <!--Firstname input-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--LastName-->
+                                                <div style="width: 29%;">
+                                                    <div style="margin-bottom: 15px;">
+                                                        <div style="display: flex; flex-direction: column; position: relative;">
+                                                            <div style="position: relative;">
+                                                                <!--LastName Label-->
+                                                                <label for="lastName" id="lastNameLabel"
+                                                                    style="font-size: 12px; color: #878787; font-weight: 500; position: absolute; top: 2px; left: 8px; background-color: white; padding: 4px 10px; display: none;">
+                                                                    Last Name
+                                                                </label>
+                                                                <!--LastName Label-->
+                                                                <!--LastName input-->
+                                                                <input id="lastNameInput" type="text"
+                                                                    style=" cursor: not-allowed; padding: 14px 0px 14px 20px; border: 1px solid #ccc; border-radius: 4px; transition: border-color 0.3s; width: 100%;"
+                                                                    name="lastname" required="" autocomplete="name" tabindex="2"
+                                                                    value="{{ profile.lastname|capfirst }}"
+                                                                    onmouseover="this.style.borderColor='#FE4F70'"
+                                                                    onmouseout="this.style.borderColor='#ccc'" disabled>
+                                                                <!--LastName input-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                        
+                                                <div style="width: 38%;">
+                                                    <div style="display: flex; align-items: center; justify-content: center;">
+                                                        <!--update button-->
+                                                        <button id="updateButton" type="submit"
+                                                            style="background-color: #FE4F70; border: none; color: white; padding: 14px 20px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; display: none;"
+                                                            onmouseover="this.style.backgroundColor='#ff5877'"
+                                                            onmouseout="this.style.backgroundColor='#FE4F70'">Update
+                                                        </button>
+                                                        <!--update button-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Personal Information-->
+            
+                                        <!--Gender Selection-->
+                                        <div class="row" style="padding-left: 4%; margin-bottom: 30px;">
+                                            <h5 style="display: inline-block; margin-right: 10px;">Your Gender</h5>
+                                            <div style="display: flex; align-items: center;">
+                                                <div style="display: inline-block; margin-right: 10px;">
+                                                    {% if profile.gender == 'M' %}
+                                                        <!--Gender Male input-->
+                                                        <input type="radio" id="male" name="gender" value="M"
+                                                            style="transform: scale(1.5); width: 15px; height: 15px;" disabled checked>
+                                                        <!--Gender Male input-->
+                                                        <!--Gender Male Label-->
+                                                        <label for="male"
+                                                            style="display: inline; margin-left: 5px; color: #696763; font-weight: 400;">
+                                                            Male
+                                                        </label>
+                                                        <!--Gender Male Label-->
+                                                    {% else %}
+                                                        <!--Gender Male input-->
+                                                        <input type="radio" id="male" name="gender" value="M"
+                                                            style="transform: scale(1.5); width: 15px; height: 15px;" disabled >
+                                                        <!--Gender Male input-->
+                                                        <!--Gender Male Label-->
+                                                        <label for="male"
+                                                            style="display: inline; margin-left: 5px; color: #696763; font-weight: 400;">
+                                                            Male
+                                                        </label>
+                                                        <!--Gender Male Label-->
+                                                    {% endif %}
+                                                </div>
+                                                <div style="display: inline-block; margin-right: 10px;">
+                                                    {% if profile.gender == 'F' %}
+                                                        <!--Gender Female input-->
+                                                        <input type="radio" id="female" name="gender" value="F"
+                                                            style="transform: scale(1.5); width: 15px; height: 15px;" disabled checked>
+                                                        <!--Gender Female input-->
+                                                        <!--Gender Female Label-->
+                                                        <label for="female"
+                                                            style="display: inline; margin-left: 5px; color: #696763; font-weight: 400;">
+                                                            Female
+                                                        </label>
+                                                        <!--Gender Female Label-->
+                                                    {% else %}
+                                                        <!--Gender Female input-->
+                                                        <input type="radio" id="female" name="gender" value="F"
+                                                            style="transform: scale(1.5); width: 15px; height: 15px;" disabled>
+                                                        <!--Gender Female input-->
+                                                        <!--Gender Female Label-->
+                                                        <label for="female"
+                                                            style="display: inline; margin-left: 5px; color: #696763; font-weight: 400;">
+                                                            Female
+                                                        </label>
+                                                        <!--Gender Female Label-->
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Gender Selection-->
+                                    </form>
+                                </div>
+                                <!--Name and gender-->
+        
+                                <!-- Email Adresses -->
+                            
+                                <div class="row" style="padding-left: 4%;">
+                                    <h4 style="display: inline-block; margin-right: 10px;">Email Address</h4>
+                                    <a id="editEmailLink"
+                                        style="color: #FE4F70; padding: 0px 10px; text-decoration: none; cursor: pointer; transition: color 0.3s;"
+                                        onclick="toggleEmailEditMode()">Edit</a>
+                                </div>
+                                <form id="emailForm" method="post" action="#">
+                                    {% csrf_token %}
+                                    <div class="row" style="padding-left: 4%; margin-bottom: 30px;">
+                                        <div
+                                            style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 15px;">
+                                            <div style="width: 50%;">
+                                                <div style="margin-bottom: 15px;">
+                                                    <div style="display: flex; flex-direction: column; position: relative;">
+                                                        <div style="position: relative;">
+                                                            <label for="email" id="emailLabel"
+                                                                style="font-size: 12px; color: #878787; font-weight: 500; position: absolute; top: 2px; left: 8px; background-color: white; padding: 4px 10px; display: none;">
+                                                                Email Address</label>
+                                                            <input id="emailInput" type="email"
+                                                                style=" cursor: not-allowed; padding: 14px 0px 14px 20px; border: 1px solid #ccc; border-radius: 4px; transition: border-color 0.3s; width: 100%;"
+                                                                name="email" required="" autocomplete="email" tabindex="3"
+                                                                value="{{ profile.user.email }}"
+                                                                onmouseover="this.style.borderColor='#FE4F70'"
+                                                                onmouseout="this.style.borderColor='#ccc'" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="width: 30%;">
+                                                <div style="display: flex; align-items: center; justify-content: center;">
+                                                    <button id="updateEmailButton" type="submit"
+                                                        style="background-color: #FE4F70; border: none; color: white; padding: 14px 20px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; display: none;"
+                                                        onmouseover="this.style.backgroundColor='#ff5877'"
+                                                        onmouseout="this.style.backgroundColor='#FE4F70'">Update Email</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- Email Adresses-->
+        
+                                <!-- Mobile Number-->
+                                <div class="row" style="padding: 0px 0px 10px 0px;">
+                                    <h4 style="padding-left: 4%; display: inline;">Mobile Number</h4>
+                                    <a id="editMobileLink"
+                                        style="margin-left: 4%; color: #FE4F70; padding: 0px 10px; text-decoration: none; cursor: pointer; transition: color 0.3s;"
+                                        onclick="toggleMobileEditMode()">Edit</a>
+                                </div>
+                                <form id="contactForm" method="post" action="#">
+                                    {% csrf_token %}
+                                    <div class="row" style="padding-left:4%;">
+                                        <div
+                                            style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 15px;">
+                                            <div style="width: 50%;">
+                                                <div style="margin-bottom: 15px;">
+                                                    <div style="display: flex; flex-direction: column; position: relative;">
+                                                        <div style="position: relative;">
+                                                            <label for="mobileNumber" id="mobileNumberLabel"
+                                                                style="font-size: 12px; color: #878787; font-weight: 500; position: absolute; top: 2px; left: 8px; background-color: white; padding: 4px 10px; display: none;">Mobile
+                                                                Number</label>
+                                                            <input id="mobileNumberInput" type="text"
+                                                                style="cursor: not-allowed; padding: 14px 0px 14px 20px; border: 1px solid #ccc; border-radius: 4px; transition: border-color 0.3s; width: 100%;"
+                                                                name="mobileNumber" required="" tabindex="3"
+                                                                value="{{ profile.mobile }}"
+                                                                onmouseover="this.style.borderColor='#FE4F70'"
+                                                                onmouseout="this.style.borderColor='#ccc'" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="width: 30%;">
+                                                <div style="display: flex; align-items: center; justify-content: center;">
+                                                    <button id="updateMobileButton" type="submit"
+                                                        style="background-color: #FE4F70; border: none; color: white; padding: 14px 20px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; display: none;"
+                                                        onmouseover="this.style.backgroundColor='#ff5877'"
+                                                        onmouseout="this.style.backgroundColor='#FE4F70'">Update Mobile</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- Mobile Number-->
+                                
+                                <!-- scripts for toggle edit  -->
+                                <script>
+                                    function togglePersonalEditMode() {
+                                        const form = document.getElementById('profileForm');
+                                        const firstNameInput = document.getElementById('firstNameInput');
+                                        const lastNameInput = document.getElementById('lastNameInput');
+                                        const firstNameLabel = document.getElementById('firstNameLabel');
+                                        const lastNameLabel = document.getElementById('lastNameLabel');
+                                        const maleRadio = document.getElementById('male');
+                                        const femaleRadio = document.getElementById('female');
+                                        const editLink = document.getElementById('editLink');
+                                        const updateButton = document.getElementById('updateButton');
+        
+                                        if (editLink.textContent === 'Edit') {
+                                            editLink.textContent = 'Cancel';
+                                            firstNameInput.removeAttribute('disabled');
+                                            lastNameInput.removeAttribute('disabled');
+                                            firstNameLabel.style.display = 'block';
+                                            lastNameLabel.style.display = 'block';
+                                            firstNameInput.style.padding = '25px 0px 3px 20px';
+                                            lastNameInput.style.padding = '25px 0px 3px 20px';
+                                            firstNameInput.style.cursor = 'auto';
+                                            lastNameInput.style.cursor = 'auto';
+                                            maleRadio.removeAttribute('disabled');
+                                            femaleRadio.removeAttribute('disabled');
+                                            updateButton.style.display = 'block';
+                                        } else {
+                                            editLink.textContent = 'Edit';
+                                            firstNameInput.setAttribute('disabled', true);
+                                            lastNameInput.setAttribute('disabled', true);
+                                            firstNameLabel.style.display = 'none';
+                                            lastNameLabel.style.display = 'none';
+                                            firstNameInput.style.padding = '14px 0px 14px 20px';
+                                            lastNameInput.style.padding = '14px 0px 14px 20px';
+                                            firstNameInput.style.cursor = 'not-allowed';
+                                            lastNameInput.style.cursor = 'not-allowed';
+                                            maleRadio.setAttribute('disabled', true);
+                                            femaleRadio.setAttribute('disabled', true);
+                                            updateButton.style.display = 'none';
+                                        }
+                                    }
+                                    function toggleEmailEditMode() {
+                                        const form = document.getElementById('emailForm');
+                                        const emailInput = document.getElementById('emailInput');
+                                        const emailLabel = document.getElementById('emailLabel');
+                                        const editEmailLink = document.getElementById('editEmailLink');
+                                        const updateEmailButton = document.getElementById('updateEmailButton');
+        
+                                        if (editEmailLink.textContent === 'Edit') {
+                                            editEmailLink.textContent = 'Cancel';
+                                            emailInput.removeAttribute('disabled');
+                                            emailLabel.style.display = 'block';
+                                            emailInput.style.padding = '25px 0px 3px 20px';
+                                            emailInput.style.cursor = 'auto';
+                                            updateEmailButton.style.display = 'block';
+                                        } else {
+                                            editEmailLink.textContent = 'Edit';
+                                            emailInput.setAttribute('disabled', true);
+                                            emailLabel.style.display = 'none';
+                                            emailInput.style.padding = '14px 0px 14px 20px';
+                                            emailInput.style.cursor = 'not-allowed';
+                                            updateEmailButton.style.display = 'none';
+                                        }
+                                    }
+        
+                                    function toggleMobileEditMode() {
+                                        const form = document.getElementById('contactForm');
+                                        const mobileNumberInput = document.getElementById('mobileNumberInput');
+                                        const mobileNumberLabel = document.getElementById('mobileNumberLabel');
+                                        const editMobileLink = document.getElementById('editMobileLink');
+                                        const updateMobileButton = document.getElementById('updateMobileButton');
+        
+                                        if (editMobileLink.textContent === 'Edit') {
+                                            editMobileLink.textContent = 'Cancel';
+                                            mobileNumberInput.removeAttribute('disabled');
+                                            mobileNumberLabel.style.display = 'block';
+                                            mobileNumberInput.style.padding = '25px 0px 3px 20px';
+                                            mobileNumberInput.style.cursor = 'auto';
+                                            updateMobileButton.style.display = 'block';
+                                        } else {
+                                            editMobileLink.textContent = 'Edit';
+                                            mobileNumberInput.setAttribute('disabled', true);
+                                            mobileNumberLabel.style.display = 'none';
+                                            mobileNumberInput.style.padding = '14px 0px 14px 20px';
+                                            mobileNumberInput.style.cursor = 'not-allowed';
+                                            updateMobileButton.style.display = 'none';
+                                        }
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<!--profile section-->
+            <!--right part-->
+        </div>
+	</div>
+
+    <!-- css for link design -->
+    <style>
+		/* Style for the clickable links and hover effect */
+		.clickable-link {
+			font-size: medium;
+			margin-top: 5px;
+			color: #FE4F70;
+			text-decoration: none;
+		}
+		
+		.clickable-link:hover {
+			color: #878787;
+		}
+		
+		/* Style for the sections to hide/show */
+		.hidden-section {
+			display: none;
+		}
+    </style>
+    
+	<!-- scripts for left part link management and right side dynamic section manage -->
+    
+      
+</section>
+<!--main content-->
+{% endblock content %}

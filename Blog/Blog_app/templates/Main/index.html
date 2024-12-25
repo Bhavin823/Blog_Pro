@@ -1,0 +1,706 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+{% block content %}
+
+	<!-- hero section -->
+	<section id="hero">
+
+		<div class="container-xl">
+
+			<div class="row gy-4">
+
+				<div class="col-lg-8">
+					
+					<!-- featured post large -->
+					{% for i in main_post %}
+					<div class="post featured-post-lg">
+						<div class="details clearfix">
+							<a href="{% url 'postbycat' i.category.categoryName %}" class="category-badge">{{i.category}}</a>
+							<h2 class="post-title"><a href="{% url 'postdetail' i.slug %}">{{i.title}}</a></h2>
+							<ul class="meta list-inline mb-0">
+								<li class="list-inline-item"><a href="#">{{i.author}}</a></li>
+								<li class="list-inline-item">{{i.date}}</li>
+							</ul>
+						</div>
+						<a href="{% url 'postdetail' i.slug %}">
+							<div class="thumb rounded">
+								<div class="inner data-bg-image" data-bg-image="{{i.post_image.url}}"></div>
+							</div>
+						</a>
+					</div>
+					{% endfor %}
+					<!-- featured post large -->
+
+					<!-- Explore Topics -->
+					<div class="section-nav-tab">
+						<div class="category-tabs">
+							<button class="tab active" onclick="filterCategory('trending')">Trending</button>
+							<button class="tab" onclick="filterCategory('popular')">Popular</button>
+							<button class="tab" onclick="filterCategory('latest')">Latest</button>
+							<button class="tab" onclick="filterCategory('programming')">Programming</button>
+						</div>
+						<div class="category-content">
+							<div class="category trending">
+								{% for i in trending_post %}
+								<div class="post post-list-sm circle">
+									<div class="thumb circle">
+										<a href="{% url 'postdetail' i.slug %}">
+											<div class="inner">
+												<img src="{{i.post_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+									</div>
+								</div>
+                                {% endfor %}
+							</div>
+							<div class="category popular">
+								{% for i in popular_post %}
+								<div class="post post-list-sm circle">
+									<div class="thumb circle">
+										<a href="{% url 'postdetail' i.slug %}">
+											<div class="inner">
+												<img src="{{i.post_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+									</div>
+								</div>
+                                {% endfor %}
+							</div>
+							<div class="category latest">
+								{% for i in latest_post %}
+								<div class="post post-list-sm circle">
+									<div class="thumb circle">
+										<a href="{% url 'postdetail' i.slug %}">
+											<div class="inner">
+												<img src="{{i.post_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+									</div>
+								</div>
+                                {% endfor %}
+							</div>
+							<div class="category programming">
+								{% for i in programming_post %}
+								<div class="post post-list-sm circle">
+									<div class="thumb circle">
+										<a href="{% url 'postdetail' i.slug %}">
+											<div class="inner">
+												<img src="{{i.post_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+									</div>
+								</div>
+                                {% endfor %}
+							</div>
+						</div>
+					</div>
+					<!--Explore Topics-->
+
+				</div>
+				
+				<!-- sidebar -->
+				<div class="col-lg-4">
+
+					<!-- post tabs -->
+					<div class="post-tabs rounded bordered">
+						<!-- tab navs -->
+						<ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
+							<li class="nav-item" role="presentation"><button aria-controls="popular" aria-selected="true" class="nav-link active" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab" role="tab" type="button">Popular</button></li>
+							<li class="nav-item" role="presentation"><button aria-controls="recent" aria-selected="false" class="nav-link" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab" type="button">Recent</button></li>
+						</ul>
+						<!-- tab contents -->
+						<div class="tab-content" id="postsTabContent">
+							<!-- loader -->
+							<div class="lds-dual-ring"></div>
+							<!-- popular posts -->
+							<div aria-labelledby="popular-tab" class="tab-pane fade show active" id="popular" role="tabpanel">
+								<!-- post -->
+                                {% for i in popular_post %}
+								<div class="post post-list-sm circle">
+									<div class="thumb circle">
+										<a href="{% url 'postdetail' i.slug %}">
+											<div class="inner">
+												<img src="{{i.post_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+									</div>
+								</div>
+                                {% endfor %}
+							</div>
+							<!-- recent posts -->
+							<div aria-labelledby="recent-tab" class="tab-pane fade" id="recent" role="tabpanel">
+								<!-- post -->
+                                {% for i in recent_post %}
+								<div class="post post-list-sm circle">
+									<div class="thumb circle">
+										<a href="{% url 'postdetail' i.slug %}">
+											<div class="inner">
+												<img src="{{i.post_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+									</div>                                    
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<!-- post tabs -->
+				</div>
+				<!-- sidebar -->
+
+			</div>
+
+		</div>
+
+	</section>
+
+	<!-- section main content -->
+	<section class="main-content">
+		<div class="container-xl">
+
+			<div class="row gy-4">
+				
+				<!-- rightside content-->
+				<div class="col-lg-8">
+
+					<!-- section header Editor’s Pick -->
+					<div class="editorspick">
+						<div class="section-header">
+							<h3 class="section-title">Editor’s Pick</h3>
+							<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+						</div>
+
+						<div class="padding-30 rounded bordered">
+							<div class="row gy-5">
+								{% for i in editors_pick %}
+								{% if forloop.counter == 1 %}
+								<div class="col-sm-6">
+									<!--  big post -->
+									<div class="post">
+										<div class="thumb rounded">
+											<a href="{% url 'postbycat' i.category.categoryName %}" class="category-badge position-absolute">{{i.category}}</a>
+											<span class="post-format">
+												<i class="icon-picture"></i>
+											</span>
+											<a href="{% url 'postdetail' i.slug %}">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<ul class="meta list-inline mt-4 mb-0">
+											<li class="list-inline-item"><a href="#"><img src="{% static 'images/other/author-sm.png' %}" class="author" alt="author"/>{{i.author}}</a></li>
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+										<h5 class="post-title mb-3 mt-3"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h5>
+										<p class="excerpt mb-0">{{i.content |safe | truncatechars:200 }}</p>
+									</div>
+								</div>
+								{% endif %}
+								{% endfor %}
+								<div class="col-sm-6">
+									<!-- small side post -->
+									{% for i in editors_pick|slice:"1:5" %}
+									<div class="post post-list-sm square">
+										<div class="thumb rounded">
+											<a href="{% url 'postdetail' i.slug %}">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<div class="details clearfix">
+											<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+											<ul class="meta list-inline mt-1 mb-0">
+												<li class="list-inline-item">{{i.date}}</li>
+											</ul>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+						<div class="spacer" data-height="50"></div>
+					</div>
+					<!-- section header Editor’s Pick -->
+
+
+					<!-- horizontal ads -->
+					<div class="ads-horizontal text-md-center">
+						<span class="ads-title">- Sponsored Ad -</span>
+						<a href="#">
+							<img src="{% static 'images/ads/ad-750.png' %}" alt="Advertisement" />
+						</a>
+					</div>
+					<!-- horizontal ads -->
+
+					<div class="spacer" data-height="50"></div>
+
+					<!-- section header Trending -->
+					<div class="trendingsection">
+						<div class="section-header">
+							<h3 class="section-title">Trending</h3>
+							<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+						</div>
+
+						<div class="padding-30 rounded bordered">
+							<div class="row gy-5">
+								<div class="col-sm-6">
+									{% for i in trending_post %}
+									{% if forloop.counter == 1 %}
+									<!-- post large -->
+									<div class="post">
+										<div class="thumb rounded">
+											<a href="{% url 'postbycat' i.category.categoryName %}" class="category-badge position-absolute">{{i.category}}</a>
+											<span class="post-format">
+												<i class="icon-picture"></i>
+											</span>
+											<a href="{% url 'postdetail' i.slug %}">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<ul class="meta list-inline mt-4 mb-0">
+											<li class="list-inline-item"><a href="#"><img src="{% static 'images/other/author-sm.png' %}" class="author" alt="author"/>{{i.author}}</a></li>
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+										<h5 class="post-title mb-3 mt-3"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:50}}</a></h5>
+										<p class="excerpt mb-0">{{i.content | safe | truncatechars:200}}</p>
+									</div>
+									{% endif %}
+									{% endfor %}
+									<!--  small post -->
+									{% for i in trending_post|slice:"1:3" %}
+									<div class="post post-list-sm square before-seperator">
+										<div class="thumb rounded">
+											<a href="{% url 'postdetail' i.slug %}">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<div class="details clearfix">
+											<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+											<ul class="meta list-inline mt-1 mb-0">
+												<li class="list-inline-item">{{i.date}}</li>
+											</ul>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+								<div class="col-sm-6">
+									<!-- post large -->
+									{% for i in trending_post %}
+									{% if forloop.counter == 4 %}
+									<div class="post">
+										<div class="thumb rounded">
+											<a href="{% url 'postbycat' i.category.categoryName %}" class="category-badge position-absolute">{{i.category}}</a>
+											<span class="post-format">
+												<i class="icon-earphones"></i>
+											</span>
+											<a href="{% url 'postdetail' i.slug %}">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<ul class="meta list-inline mt-4 mb-0">
+											<li class="list-inline-item"><a href="#"><img src="{% static 'images/other/author-sm.png' %}" class="author" alt="author"/>{{i.author}}</a></li>
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+										<h5 class="post-title mb-3 mt-3"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h5>
+										<p class="excerpt mb-0">{{i.content | safe | truncatechars:200}}</p>
+									</div>
+									{% endif %}
+									{% endfor %}
+									<!-- small post -->
+									{% for i in trending_post|slice:"5:7" %}
+									<div class="post post-list-sm square before-seperator">
+										<div class="thumb rounded">
+											<a href="{% url 'postdetail' i.slug %}">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<div class="details clearfix">
+											<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title}}</a></h6>
+											<ul class="meta list-inline mt-1 mb-0">
+												<li class="list-inline-item">{{i.date}}</li>
+											</ul>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+						<div class="spacer" data-height="50"></div>
+					</div>
+					<!-- section header Trending -->
+
+
+					<!-- section header Inspiration -->
+					<div class="inspirationsection">
+						<div class="section-header">
+							<h3 class="section-title">Inspiration</h3>
+							<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+							<div class="slick-arrows-top">
+								<button type="button" data-role="none" class="carousel-topNav-prev slick-custom-buttons" aria-label="Previous"><i class="icon-arrow-left"></i></button>
+								<button type="button" data-role="none" class="carousel-topNav-next slick-custom-buttons" aria-label="Next"><i class="icon-arrow-right"></i></button>
+							</div>
+						</div>
+
+						<div class="row post-carousel-twoCol post-carousel">
+							<!-- post -->
+							{% for i in  inspiration %}
+							<div class="post post-over-content col-md-6">
+								<div class="details clearfix">
+									<a href="{% url 'postbycat' i.category.categoryName %}" class="category-badge">{{i.category}}</a>
+									<h4 class="post-title"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h4>
+									<ul class="meta list-inline mb-0">
+										<li class="list-inline-item"><a href="#">{{i.author}}</a></li>
+										<li class="list-inline-item">{{i.date}}</li>
+									</ul>
+								</div>
+								<a href="{% url 'postdetail' i.slug %}">
+									<div class="thumb rounded">
+										<div class="inner">
+											<img src="{{i.post_image.url}}" alt="thumb" />
+										</div>
+									</div>
+								</a>
+							</div>
+							{% endfor %}
+						</div>
+						<div class="spacer" data-height="50"></div>
+					</div>
+					<!-- section header Inspiration -->
+
+
+					<!-- section header Latest Posts -->
+					<div class="latestsection">
+						<div class="section-header">
+							<h3 class="section-title">Latest Posts</h3>
+							<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+						</div>
+
+						<div class="padding-30 rounded bordered">
+
+							<div class="row">
+								{% for i in latest_post %}
+								<div class="col-md-12 col-sm-6">
+									<!-- post -->
+									<div class="post post-list clearfix">
+										<div class="thumb rounded">
+											<span class="post-format-sm">
+												<i class="icon-picture"></i>
+											</span>
+											<a href="{% url 'postdetail' i.slug %}">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<div class="details">
+											<ul class="meta list-inline mb-3">
+												<li class="list-inline-item"><a href="#"><img src="{% static 'images/other/author-sm.png' %}" class="author" alt="author"/>Katen Doe</a></li>
+												<li class="list-inline-item"><a href="#">{{i.category}}</a></li>
+												<li class="list-inline-item">{{i.date}}</li>
+											</ul>
+											<h5 class="post-title"><a href="{% url 'postdetail' i.slug %}">{{i.title}}</a></h5>
+											<div class="post-bottom clearfix d-flex align-items-center">
+												<div class="social-share me-auto">
+													<button class="toggle-button icon-share"></button>
+													<ul class="icons list-unstyled list-inline mb-0">
+														<li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+														<li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+														<li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+														<li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+														<li class="list-inline-item"><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
+														<li class="list-inline-item"><a href="#"><i class="far fa-envelope"></i></a></li>
+													</ul>
+												</div>
+												<div class="more-button float-end">
+													<a href="{% url 'postdetail' i.slug %}"><span class="icon-options"></span></a>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- post -->
+								</div>
+								{% endfor%}
+							</div>
+
+
+							<!-- load more button -->
+							<div class="text-center">
+								<button class="btn btn-simple">Load More</button>
+							</div>
+
+						</div>
+					</div>
+					<!-- section header Latest Posts -->
+
+				</div>
+				<!-- rightside content-->
+
+				<!-- side bar-->
+				<div class="col-lg-4">
+
+					<!-- sidebar -->
+					<div class="sidebar">
+						<!-- widget about -->
+						<div class="aboutsidebarsection">
+							<div class="widget rounded">
+								<div class="widget-about data-bg-image text-center" data-bg-image="{% static 'images/map-bg.png' %}">
+									<img src="{% static 'images/logo.svg' %}" alt="logo" class="mb-4" />
+									<p class="mb-4">Hello, We’re content writer who is fascinated by content fashion, celebrity and lifestyle. We helps clients bring the right content to the right people.</p>
+									<ul class="social-icons list-unstyled list-inline mb-0">
+										<li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+										<li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+										<li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+										<li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+										<li class="list-inline-item"><a href="#"><i class="fab fa-medium"></i></a></li>
+										<li class="list-inline-item"><a href="#"><i class="fab fa-youtube"></i></a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<!-- widget popular posts -->
+						<div class="popularpostsidebarsection">
+							<div class="widget rounded">
+								<div class="widget-header text-center">
+									<h3 class="widget-title">Popular Posts</h3>
+									<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+								</div>
+								<div class="widget-content">
+									<!-- post -->
+									{% for i in popular_post %}
+									<div class="post post-list-sm circle">
+										<div class="thumb circle">
+											<span class="number">{{forloop.counter}}</span>
+											<a href="{% url 'postdetail' i.slug %}">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<div class="details clearfix">
+											<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+											<ul class="meta list-inline mt-1 mb-0">
+												<li class="list-inline-item">{{i.date}}</li><li class="list-inline-item">{{i.views}} Views</li>
+											</ul>
+										</div>
+									</div>
+									{% endfor %}
+									{% comment %} {% for i in popular_post|slice:"0:3" %}
+									<div class="post post-list-sm circle">
+										<div class="thumb circle">
+											<span class="number">{{forloop.counter}}</span>
+											<a href="{% url 'postdetail' i.slug %}">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<div class="details clearfix">
+											<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h6>
+											<ul class="meta list-inline mt-1 mb-0">
+												<li class="list-inline-item">{{i.date}}</li>
+											</ul>
+										</div>
+									</div>
+									{% endfor %} {% endcomment %}
+								</div>		
+							</div>
+						</div>
+
+						<!-- widget categories -->
+						<div class="categoriesidebarsection">
+							<div class="widget rounded">
+								<div class="widget-header text-center">
+									<h3 class="widget-title">Explore Topics</h3>
+									<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+								</div>
+								<div class="widget-content">
+									<ul class="list">
+										{% for i in category %}
+										<li><a href="{% url 'postbycat' i.categoryName %}">{{i.categoryName}}</a></li>
+										{% endfor %}
+									</ul>
+								</div>
+								
+							</div>
+						</div>
+
+						<!-- widget newsletter -->
+						<!--
+						<div class="widget rounded">
+							<div class="widget-header text-center">
+								<h3 class="widget-title">Newsletter</h3>
+								<img src="images/wave.svg" class="wave" alt="wave" />
+							</div>
+							<div class="widget-content">
+								<span class="newsletter-headline text-center mb-3">Join 70,000 subscribers!</span>
+								<form>
+									<div class="mb-2">
+										<input class="form-control w-100 text-center" placeholder="Email address…" type="email">
+									</div>
+									<button class="btn btn-default btn-full" type="submit">Sign Up</button>
+								</form>
+								<span class="newsletter-privacy text-center mt-3">By signing up, you agree to our <a href="#">Privacy Policy</a></span>
+							</div>		
+						</div>
+						-->
+
+						<!-- widget celebrate_post carousel -->
+						<div class="celebratesidebarsection">
+							<div class="widget rounded">
+								<div class="widget-header text-center">
+									<h3 class="widget-title">Celebration</h3>
+									<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+								</div>
+								<div class="widget-content">
+									<div class="post-carousel-widget">
+										<!-- post -->
+										{% for i in celebrate_post|slice:"0:3" %}
+										<div class="post post-carousel">
+											<div class="thumb rounded">
+												<a href="{% url 'postbycat' i.category.categoryName %}" class="category-badge position-absolute">{{i.category}}</a>
+												<a href="{% url 'postdetail' i.slug %}">
+													<div class="inner">
+														<img src="{{i.post_image.url}}" alt="post-title" />
+													</div>
+												</a>
+											</div>
+											<h5 class="post-title mb-0 mt-4"><a href="{% url 'postdetail' i.slug %}">{{i.title | truncatechars:35}}</a></h5>
+											<ul class="meta list-inline mt-2 mb-0">
+												<li class="list-inline-item"><a href="#">{{i.author}}</a></li>
+												<li class="list-inline-item">{{i.date}}</li>
+											</ul>
+										</div>
+										{% endfor %}
+									</div>
+									<!-- carousel arrows -->
+									<div class="slick-arrows-bot">
+										<button type="button" data-role="none" class="carousel-botNav-prev slick-custom-buttons" aria-label="Previous"><i class="icon-arrow-left"></i></button>
+										<button type="button" data-role="none" class="carousel-botNav-next slick-custom-buttons" aria-label="Next"><i class="icon-arrow-right"></i></button>
+									</div>
+								</div>		
+							</div>
+						</div>
+
+						<!-- widget advertisement -->
+						<div class="widget no-container rounded text-md-center">
+							<span class="ads-title">- Sponsored Ad -</span>
+							<a href="#" class="widget-ads">
+								<img src="{% static 'images/ads/ad-360.png' %}" alt="Advertisement" />	
+							</a>
+						</div>
+
+						<!-- widget tags -->
+						<div class="tabsidebarsection">
+							<div class="widget rounded">
+								<div class="widget-header text-center">
+									<h3 class="widget-title">Tag Clouds</h3>
+									<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+								</div>
+								<div class="widget-content">
+									<a href="#" class="tag">#Trending</a>
+									<a href="#" class="tag">#Video</a>
+									<a href="#" class="tag">#Featured</a>
+									<a href="#" class="tag">#Gallery</a>
+									<a href="#" class="tag">#Celebrities</a>
+								</div>		
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+				<!-- side bar-->
+			</div>
+
+		</div>
+	</section>
+
+	<!-- instagram feed -->
+	<div class="instagram">
+		<div class="container-xl">
+			<!-- button -->
+			<a href="#" class="btn btn-default btn-instagram">@Katen on Instagram</a>
+			<!-- images -->
+			<div class="instagram-feed d-flex flex-wrap">
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-1.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-2.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-3.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-4.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-5.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-6.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

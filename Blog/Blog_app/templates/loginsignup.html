@@ -1,0 +1,104 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div
+    style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #F1F8FF;">
+    <div
+        style="max-width: 400px; width: 90%; padding: 20px; background-color: #ffffff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 25px;">
+
+        <div class="post-tabs rounded bordered">
+            <!-- tab navs -->
+            <ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
+                <li class="nav-item" role="presentation"><button aria-controls="popular" aria-selected="true"
+                        class="nav-link active" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab"
+                        role="tab" type="button">Signup</button></li>
+                <li class="nav-item" role="presentation"><button aria-controls="recent" aria-selected="false"
+                        class="nav-link" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab"
+                        type="button">Login</button></li>
+            </ul>
+            <!-- tab contents -->
+            <div class="tab-content" id="postsTabContent">
+                <!-- loader -->
+                <div class="lds-dual-ring"></div>
+                <!-- Signup -->
+                <div aria-labelledby="popular-tab" class="tab-pane fade show active" id="popular" role="tabpanel">
+                    <!-- Signup Form -->
+                    <form action="/signuphandle" class="comment-form" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="column col-md-12">
+                                <!-- Name input -->
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        placeholder="Username" required="required">
+                                </div>
+                            </div>
+                            <div class="column col-md-12">
+                                <!-- Email input -->
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        placeholder="Email address" required="required">
+                                </div>
+                            </div>
+                            <div class="column col-md-12">
+                                <!-- password input -->
+                                <div class="form-group">
+                                    <input type="password" class="form-control" id="password1" name="password1"
+                                        placeholder="Password" required="required">
+                                </div>
+                            </div>
+                            <div class="column col-md-12">
+                                <!-- password2 input -->
+                                <div class="form-group">
+                                    <input type="password" class="form-control" id="password2" name="password2"
+                                        placeholder="Confirm Password" required="required">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-default btn-full" type="submit" value="Submit">
+                            Sign Up
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Login -->
+                <div aria-labelledby="recent-tab" class="tab-pane fade" id="recent" role="tabpanel">
+                    <!-- Login Form -->
+
+                    <form action="/loginhandle" class="comment-form" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="column col-md-12">
+                                <!-- Email input -->
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="loginusername" name="loginusername"
+                                        placeholder="Username" required="required">
+                                </div>
+                            </div>
+                            <div class="column col-md-12">
+                                <!-- password input -->
+                                <div class="form-group">
+                                    <input type="password" class="form-control" id="loginpassword" name="loginpassword"
+                                        placeholder="Password" required="required">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-default btn-full" type="submit" value="Submit">
+                            Login
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+            {% if messagekey %}
+            <script>alert("{{ messagekey }}")</script>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

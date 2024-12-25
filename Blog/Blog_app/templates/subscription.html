@@ -1,0 +1,105 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container-xl">
+        <div class="text-center">
+            <h1 class="mt-0 mb-2">Subscription</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center mb-0">
+                    <li class="breadcrumb-item"><a href="{% url "home" %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Subscription</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="main-content">
+    <div class="container-xl">
+        <div class="subs-container">
+            <div class="subscribe-card">
+                <h2>Subscribe to Our Newsletter</h2>
+                <p>Be Updated with the Latest Stories</p>
+                <form id="subs-thanks" method="POST" action="{% url "addsubscription" %}">
+                    {% csrf_token %}
+                    <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-default">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popup -->
+<div id="popup" class="popup-container" style="{% if messagekey %} display: flex; {% else %} display: none; {% endif %}">
+    <div class="popup-card">
+        <p>{{ messagekey }}</p>
+        <button id="closePopup">OK</button>
+    </div>
+</div>
+
+<script>
+    // JavaScript to handle the popup
+    document.getElementById("closePopup").addEventListener("click", function () {
+        document.getElementById("popup").style.display = "none";
+    });
+</script>
+
+<style>
+    /* Popup Container */
+    .popup-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Popup Card */
+    .popup-card {
+        background: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        animation: popup-show 0.3s ease-in-out;
+    }
+
+    /* Animation */
+    @keyframes popup-show {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* Button Style */
+    #closePopup {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    #closePopup:hover {
+        background-color: #218838;
+    }
+</style>
+{% endblock %}

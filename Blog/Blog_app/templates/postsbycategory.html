@@ -1,0 +1,291 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+{% block content %}
+	
+	<!-- page header -->
+    <section class="page-header">
+        <div class="container-xl">
+            <div class="text-center">
+                <h1 class="mt-0 mb-2">{{postbycategory.first.category}}</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'category' %}">Category</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{{postbycategory.first.category}}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+	<!-- section main content -->
+	<section class="main-content">
+		<div class="container-xl">
+
+			<div class="row gy-4">
+
+					<!--right side Post-->
+				<div class="col-lg-8">
+
+                    <div class="row gy-4">
+
+                        {% for i in page %}
+                        <div class="col-sm-12">
+                            <!-- postsbycategory -->
+                            <div class="post post-grid rounded bordered">
+                                <div class="thumb top-rounded">
+                                    <a href="{% url 'postbycat' i.category.categoryName %}" class="category-badge position-absolute">{{i.category}}</a>
+                                    <span class="post-format">
+                                        <i class="icon-picture"></i>
+                                    </span>
+                                    <a href="{% url 'postdetail' i.slug %}">
+                                        <div class="inner">
+                                            <img src="{{i.post_image.url}}" alt="{{i.category}}" />
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="details">
+                                    <h5 class="post-title mb-3 mt-3"><a href="{% url 'postdetail' i.slug %}">{{i.title}}</a></h5>
+                                </div>
+                                <div class="post-bottom clearfix d-flex align-items-center">
+                                    <div class="social-share me-auto">
+                                        <button class="toggle-button icon-share"></button>
+                                        <ul class="icons list-unstyled list-inline mb-0">
+                                            <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                            <li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+                                            <li class="list-inline-item"><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
+                                            <li class="list-inline-item"><a href="#"><i class="far fa-envelope"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="more-button float-end">
+                                        <a href="#"><span class="icon-options"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+					<!--pagination for posts by specified category -->
+					
+					<nav>
+						<ul class="pagination justify-content-center">
+							{% if page.has_previous %}
+								<li class="page-item">
+									<a class="page-link" href="?page=1" aria-label="First">
+										<span aria-hidden="true">&laquo;&laquo;</span>
+									</a>
+								</li>
+								<li class="page-item">
+									<a class="page-link" href="?page={{ page.previous_page_number }}" aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
+									</a>
+								</li>
+							{% endif %}
+							
+							{% for page_num in page.paginator.page_range %}
+								{% if page_num >= page.number|add:"-1" and page_num <= page.number|add:"1" %}
+									<li class="page-item {% if page.number == page_num %}active{% endif %}">
+										<a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+									</li>
+								{% endif %}
+							{% endfor %}
+							
+							{% if page.has_next %}
+								<li class="page-item">
+									<a class="page-link" href="?page={{ page.next_page_number }}" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+									</a>
+								</li>
+								<li class="page-item">
+									<a class="page-link" href="?page={{ page.paginator.num_pages }}" aria-label="Last">
+										<span aria-hidden="true">&raquo;&raquo;</span>
+									</a>
+								</li>
+							{% endif %}
+						</ul>
+					</nav>
+					
+					<!--pagination for posts by specified category -->
+
+
+				</div>
+					<!--right side Post-->
+					
+					<!--left side-->
+				<div class="col-lg-4">
+					<!-- sidebar -->
+					<div class="sidebar">
+						<!-- widget about -->
+						<div class="widget rounded">
+							<div class="widget-about data-bg-image text-center" data-bg-image="{% static 'images/map-bg.png' %}">
+								<img src="{% static 'images/logo.svg' %}" alt="logo" class="mb-4" />
+								<p class="mb-4">Hello, We’re content writer who is fascinated by content fashion, celebrity and lifestyle. We helps clients bring the right content to the right people.</p>
+								<ul class="social-icons list-unstyled list-inline mb-0">
+									<li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+									<li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+									<li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+									<li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+									<li class="list-inline-item"><a href="#"><i class="fab fa-medium"></i></a></li>
+									<li class="list-inline-item"><a href="#"><i class="fab fa-youtube"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						{% if popularpostbycategory %}
+						<!-- widget popular posts -->
+						<div class="widget rounded">
+							<div class="widget-header text-center">
+								<h3 class="widget-title">Popular Posts In {{postbycategory.first.category}}</h3>
+								<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+							</div>
+							<div class="widget-content">
+								{% for i in popularpostbycategory %}
+								<!-- post -->
+								<div class="post post-list-sm circle">
+									<div class="thumb circle">
+										<span class="number">{{forloop.counter}}</span>
+										<a href="{% url 'postdetail' i.slug %}">
+											<div class="inner">
+												<img src="{{i.post_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										<h6 class="post-title my-0"><a href="{% url 'postdetail' i.slug %}">{{i.title |truncatechars:35}}</a></h6>
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+									</div>
+								</div>
+								{% endfor %}
+							</div>		
+						</div>
+						{% endif %}
+
+						<!-- widget categories -->
+						<div class="widget rounded">
+							<div class="widget-header text-center">
+								<h3 class="widget-title">Explore Topics</h3>
+								<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+							</div>
+							<div class="widget-content">
+								<ul class="list">
+									{% for i in category %}
+									<li><a href="{% url 'postbycat' i.categoryName %}">{{i.categoryName}}</a><span></span></li>
+									{% endfor %}
+								</ul>
+							</div>
+							
+						</div>
+
+						{% comment %} <!-- widget post carousel -->
+						<div class="widget rounded">
+							<div class="widget-header text-center">
+								<h3 class="widget-title">Celebration</h3>
+								<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+							</div>
+							<div class="widget-content">
+								<div class="post-carousel-widget">
+									{% for i in celebrate_post|slice:"0:3" %}
+									<!-- post -->
+									<div class="post post-carousel">
+										<div class="thumb rounded">
+											<a href="category.html" class="category-badge position-absolute">{{i.category}}</a>
+											<a href="blog-single.html">
+												<div class="inner">
+													<img src="{{i.post_image.url}}" alt="post-title" />
+												</div>
+											</a>
+										</div>
+										<h5 class="post-title mb-0 mt-4"><a href="blog-single.html">{{i.title}}</a></h5>
+										<ul class="meta list-inline mt-2 mb-0">
+											<li class="list-inline-item"><a href="#">{{i.author}}</a></li>
+											<li class="list-inline-item">{{i.date}}</li>
+										</ul>
+									</div>
+									{% endfor %}
+								</div>
+								<!-- carousel arrows -->
+								<div class="slick-arrows-bot">
+									<button type="button" data-role="none" class="carousel-botNav-prev slick-custom-buttons" aria-label="Previous"><i class="icon-arrow-left"></i></button>
+									<button type="button" data-role="none" class="carousel-botNav-next slick-custom-buttons" aria-label="Next"><i class="icon-arrow-right"></i></button>
+								</div>
+							</div>		
+						</div> {% endcomment %}
+
+						<!-- widget advertisement -->
+						<div class="widget no-container rounded text-md-center">
+							<span class="ads-title">- Sponsored Ad -</span>
+							<a href="#" class="widget-ads">
+								<img src="{% static 'images/ads/ad-360.png' %}" alt="Advertisement" />	
+							</a>
+						</div>
+
+						<!-- widget tags -->
+						<div class="widget rounded">
+							<div class="widget-header text-center">
+								<h3 class="widget-title">Tag Clouds</h3>
+								<img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" />
+							</div>
+							<div class="widget-content">
+								<a href="#" class="tag">#Trending</a>
+								<a href="#" class="tag">#Video</a>
+								<a href="#" class="tag">#Featured</a>
+								<a href="#" class="tag">#Gallery</a>
+								<a href="#" class="tag">#Celebrities</a>
+							</div>		
+						</div>
+
+					</div>
+                    <!-- sidebar -->
+				</div>
+					<!--left side-->
+			</div>
+
+		</div>
+	</section>
+
+	<!-- instagram feed -->
+	<div class="instagram">
+		<div class="container-xl">
+			<!-- button -->
+			<a href="#" class="btn btn-default btn-instagram">@Katen on Instagram</a>
+			<!-- images -->
+			<div class="instagram-feed d-flex flex-wrap">
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-1.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-2.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-3.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-4.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-5.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+				<div class="insta-item col-sm-2 col-6 col-md-2">
+					<a href="#">
+						<img src="{% static 'images/insta/insta-6.jpg' %}" alt="insta-title" />
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
