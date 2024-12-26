@@ -133,7 +133,7 @@
                                             style="margin-left: 4%; color: #FE4F70; padding: 0px 10px; text-decoration: none; cursor: pointer; transition: color 0.3s;"
                                             onclick="togglePersonalEditMode()">Edit</a>
                                     </div>
-                                    <form id="profileForm" method="post" action="#">
+                                    <form id="profileForm" method="post" action="{% url "update_personal_info" %}">
                                         {% csrf_token %}
                                         <div class="row" style="padding-left: 4%;">
                                             <div
@@ -269,7 +269,7 @@
                                         style="color: #FE4F70; padding: 0px 10px; text-decoration: none; cursor: pointer; transition: color 0.3s;"
                                         onclick="toggleEmailEditMode()">Edit</a>
                                 </div>
-                                <form id="emailForm" method="post" action="#">
+                                <form id="emailForm" method="post" action="{% url "update_email" %}">
                                     {% csrf_token %}
                                     <div class="row" style="padding-left: 4%; margin-bottom: 30px;">
                                         <div
@@ -311,7 +311,7 @@
                                         style="margin-left: 4%; color: #FE4F70; padding: 0px 10px; text-decoration: none; cursor: pointer; transition: color 0.3s;"
                                         onclick="toggleMobileEditMode()">Edit</a>
                                 </div>
-                                <form id="contactForm" method="post" action="#">
+                                <form id="contactForm" method="post" action="{% url "update_contact" %}">
                                     {% csrf_token %}
                                     <div class="row" style="padding-left:4%;">
                                         <div
