@@ -1,17 +1,21 @@
 from django.shortcuts import render,redirect
 from user_app.models import UserProfileModel
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def profileView(request):
-    userprofile = UserProfileModel.objects.get(user=request.user)  
-    
+    userprofile = UserProfileModel.objects.get(user=request.user) 
+    userprofile.email = User.email
+    userprofile.save() 
     context={
         'profile':userprofile,
     }
     return render(request,'profile.html',context)
 
+@login_required
 def profile_image_upload(request):
     if request.method == 'POST':
         image = request.FILES.get('profile_photo')  # Use request.FILES to get the uploaded file
@@ -24,14 +28,30 @@ def profile_image_upload(request):
 
     return redirect('profile')
 
-def name_and_gender(request):
+@login_required
+def update_personal_info(request):
+    profile = UserProfileModel.objects.get(user=request.user)
     if request.method == 'POST':
-        user = request.user
-        profile = UserProfileModel.objects.get(user=user)
         profile.firstname = request.POST.get('firstname')
         profile.lastname = request.POST.get('lastname')
         profile.gender = request.POST.get('gender')
-
         profile.save()
+        return redirect('profile')
 
-    return redirect('profile')
+@login_required
+def update_email(request):
+    user = request.user
+    if request.method == "POST":
+        new_email = request.POST.get('email')
+        user.email = new_email
+        user.save()
+        return redirect('profile')
+
+@login_required
+def update_contact(request):
+    profile = UserProfileModel.objects.get(user=request.user)
+    if request.method == "POST":
+        new_contact = request.POST.get('mobileNumber')
+        profile.mobile = new_contact
+        profile.save()
+        return redirect('profile')
