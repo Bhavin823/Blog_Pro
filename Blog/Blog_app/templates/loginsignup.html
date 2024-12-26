@@ -12,10 +12,10 @@
             <!-- tab navs -->
             <ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
                 <li class="nav-item" role="presentation"><button aria-controls="popular" aria-selected="true"
-                        class="nav-link active" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab"
+                        class="nav-link {% if tab != 'login' %}active{% endif %}" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab"
                         role="tab" type="button">Signup</button></li>
                 <li class="nav-item" role="presentation"><button aria-controls="recent" aria-selected="false"
-                        class="nav-link" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab"
+                        class="nav-link {% if tab == 'login' %}active{% endif %}" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab"
                         type="button">Login</button></li>
             </ul>
             <!-- tab contents -->
@@ -23,7 +23,7 @@
                 <!-- loader -->
                 <div class="lds-dual-ring"></div>
                 <!-- Signup -->
-                <div aria-labelledby="popular-tab" class="tab-pane fade show active" id="popular" role="tabpanel">
+                <div aria-labelledby="popular-tab" class="tab-pane fade {% if tab != 'login' %}show active{% endif %}" id="popular" role="tabpanel">
                     <!-- Signup Form -->
                     <form action="/signuphandle" class="comment-form" method="post">
                         {% csrf_token %}
@@ -64,7 +64,7 @@
                 </div>
 
                 <!-- Login -->
-                <div aria-labelledby="recent-tab" class="tab-pane fade" id="recent" role="tabpanel">
+                <div aria-labelledby="recent-tab" class="tab-pane fade {% if tab == 'login' %}show active{% endif %}" id="recent" role="tabpanel">
                     <!-- Login Form -->
 
                     <form action="/loginhandle" class="comment-form" method="post">
