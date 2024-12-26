@@ -38,4 +38,7 @@ urlpatterns = [
     # subscription
     path('subscribe',views.subscription,name='subscribe'),
     path('addsubscription',views.addsubscription,name='addsubscription'),
+
+    # comingsoon
+    path('comingsoon',views.comigsoon,name='comingsoon'),
 ]
