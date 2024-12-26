@@ -112,7 +112,7 @@
 							</ul>
 						</li>
 						{% else %}
-						<li class="nav-item">
+						<li class="nav-item {% if request.resolver_match.url_name == 'signup' %}active{% endif %}">
 							<a class="nav-link" href="{% url 'signup' %}">Signup / Login</a>
 						</li>
 						{% endif %}
