@@ -1,0 +1,53 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- page header -->
+    <section class="page-header">
+        <div class="container-xl">
+            <div class="text-center">
+                <h1 class="mt-0 mb-2">Comingsoon</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Comingsoon</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <h1>Coming Soon</h1>
+        <p>We are working hard to give you a better experience. Stay tuned!</p>
+    </div>
+    <style>
+        .container {
+            text-align: center;
+            margin-top:20px;
+            padding: 20px;
+            background: white;
+            border : 1px solid #EBEBEB;
+            border-radius: 10px;
+            
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            p {
+                font-size: 1em;
+            }
+        }
+    </style>
+
+{% endblock %}
