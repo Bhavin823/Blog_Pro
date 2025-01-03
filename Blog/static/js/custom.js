@@ -284,3 +284,12 @@ document.addEventListener('DOMContentLoaded', () => {
     filterCategory('trending');
   }
 });
+
+
+/*=========================================================================
+                    user_post option section
+=========================================================================*/
+function toggleDropdown() {
+  const menu = document.querySelector('.dropdown-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
