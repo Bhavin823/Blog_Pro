@@ -3419,3 +3419,58 @@ button:focus {
   color: green;
   margin-top: 40px;
 }
+
+/* user_post option section */
+.custom-dropdown-container {
+  display: inline-block;
+  margin-left: 36%;
+}
+
+/* Dropdown menu inside the custom container */
+.custom-dropdown-container .dropdown-menu {
+  display: none; /* Initially hidden */
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+  right: 0; /* Align to the right by default  */
+}
+
+/* Show dropdown on hover */
+.custom-dropdown-container .list-inline-item.dropdown:hover .dropdown-menu {
+  display: block;
+  left: auto; /* Reset left alignment */
+  right: -70px; /* Align properly */
+  transform: translateX(-100%); /* Shift dropdown to open on the left */
+}
+
+/* Remove the after pseudo-element from dropdown items */
+.custom-dropdown-container .list-inline-item.dropdown .dropdown-menu li:after {
+  content: none !important; /* Prevent dots or decorations */
+}
+
+/* Remove the after pseudo-element from the dropdown icon */
+.custom-dropdown-container .list-inline-item.dropdown:after {
+  content: none !important; /* Ensure no unwanted decorations appear */
+}
+
+/* General item styles (scoped within the custom container) */
+.custom-dropdown-container .dropdown-item {
+  padding: 0;
+  text-decoration: none;
+  color: #333;
+}
+
+/* Optional: Highlight dropdown items on hover */
+.custom-dropdown-container .dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+@media (max-width:768px){
+  .custom-dropdown-container {
+    margin-left: 0;
+  }
+}
