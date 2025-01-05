@@ -108,6 +108,7 @@
 							<a class="nav-link dropdown-toggle" href="#">Welcome {{request.user|capfirst}}</a>
 							<ul class="dropdown-menu">
 								<li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+								<li><a class="dropdown-item" href="{% url 'create_post' %}">Write Blog</a></li>
 								<li><a class="dropdown-item" href="{% url 'logouthandle' %}">Logout</a></li>
 							</ul>
 						</li>
@@ -208,7 +209,8 @@
 			<li>
 				<a href="#">Welcome {{request.user|capfirst}}</a>
 				<ul class="submenu">
-					<li><a href="#">Profile</a></li>
+					<li><a href="{% url "profile" %}">Profile</a></li>
+					<li><a href="{% url 'create_post' %}">Write Blog</a></li>
 					<li><a href="{% url 'logouthandle' %}">Logout</a></li>
 				</ul>
 			</li>
