@@ -14,12 +14,12 @@
 						<div class="row">
                             <div class="col-sm-5" style="padding-left: 30px; margin-top: 8%;">
                               <div class="view-product">
-                                <img src="{{profile.profile_image.url}}" alt="" style="display: block; width: 100%; border-radius: 50%; height: 80px; aspect-ratio: 1/1;" />
+                                <img src="{{profile.profile_image.url}}" alt="{{profile.profile_image}}" />
                               </div>
                             </div>
-                            <div class="col-sm-7" style="padding: 10px;">
-                              <h6>Hello!</h6>
-                              <h4>{{profile.user.username|capfirst}}</h4>
+                            <div class="col-sm-7 profile-greetings">
+                              <h6 class="profile-hello">Hello!</h6>
+                              <h4 class="profile-username">{{profile.user.username|capfirst}}</h4>
                             </div>
                         </div>
                     </div>
@@ -29,23 +29,26 @@
 					<div class="brands_products">
 						<div class="brands-name">
 							<div class=row>
-								<div class="col-sm-3" style="padding-left: 30px;">
+								<div class="col-sm-3 user-icon">
 									<div class="view-product">
 										<i class="fa fa-user" style="font-size: x-large; color:#ff5877"></i>
 									</div>
 								</div>
-								<div class="col-sm-9" style="padding:0px;">
+								<div class="col-sm-9 profile-account">
 									<h5 style="font-size:medium; margin-top:5px; color:#878787;">ACCOUNT SETTING</h5>
 								</div>
 							</div>
                             
 							<hr style="margin-top:4px;">
-							<div class="row">
-                                <div class="col-sm-3" style="padding-left: 30px;"></div>
-                                <div class="col-sm-9" style="padding: 0px;">
-                                  <h4 style="margin-top: 4px;">
-                                    <a href="#Profile_information" class="clickable-link" >Profile Information</a>
-                                  </h4>
+							<div class="row profile-option">
+                                <div class="col-sm-3 logout-icon"></div>
+                                <div class="col-sm-9 profile-logout" style="padding: 0px;">
+                                    <h4 style="margin-top: 4px;">
+                                        <a href="#Profile_information" class="clickable-link" >Profile Information</a>
+                                    </h4>
+                                    <h4 style="margin-top: 4px;">
+                                        <a href="{% url "user_blogs" %}" class="clickable-link" >Your Blogs</a>
+                                    </h4>
                                 </div>
                             </div>
 							<hr style="margin-top:10px;">
@@ -62,7 +65,7 @@
 										</svg>
 									</div>
 								</div>
-								<div class="col-sm-9" style="padding:0px;">
+								<div class="col-sm-9" class="profile-logout">
 									<h5 style="margin-top:4px;"><a href="{% url 'logouthandle' %}"
 											style="font-size:medium; margin-top:4px; color:#878787; padding-left:0px;">
 											Logout</a></h5>
