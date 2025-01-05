@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.db.models.signals import pre_save
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.timezone import now
 from django.contrib.auth.models import User
 from user_app.models import UserProfileModel
@@ -30,12 +30,12 @@ class PostModel(models.Model):
 
     post_image = models.ImageField(upload_to='PostImages',null=True,blank=True)
     title = models.CharField(max_length=200)
-    author = models.CharField(max_length=50)
+    author = models.ForeignKey(User,on_delete=models.CASCADE, blank=True,null=True, related_name='user_posts')
     category = models.ForeignKey(CategoryModel,on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
-    content = RichTextField()
+    content = CKEditor5Field(config_name='extends')
     slug = models.SlugField(max_length=500,null=True,blank=True,unique=True)
-    status = models.CharField(choices=STATUS,max_length=100)
+    status = models.CharField(choices=STATUS,max_length=100,default='0')
     section = models.CharField(choices=SECTION,max_length=200)
     main_post = models.BooleanField(default=False)
     views = models.IntegerField(default=0)
