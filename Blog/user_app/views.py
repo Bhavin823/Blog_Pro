@@ -1,7 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from user_app.models import UserProfileModel
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from Blog_app.models import PostModel
+from Blog_app.forms import BlogPostForm
 
 
 # Create your views here.
@@ -55,3 +57,36 @@ def update_contact(request):
         profile.mobile = new_contact
         profile.save()
         return redirect('profile')
+    
+
+@login_required
+def user_blogs(request):
+    user = request.user
+    blogs  = user.user_posts.all()
+    context = {
+        'blogs':blogs,
+    }
+    return render(request,'user_blogs.html',context)
+
+
+@login_required
+def edit_blog(request,post_slug):
+    try:
+        post = PostModel.objects.get(slug=post_slug,author=request.user)
+    except PostModel.DoesNotExist:
+        return redirect('user_blogs')
+    if request.method == "POST":
+        form = BlogPostForm(request.POST,request.FILES,instance=post)
+        if form.is_valid():
+            form.save(user=request.user)
+            return redirect('user_blogs')
+    else:
+        form = BlogPostForm(instance = post)    
+    return render(request,'edit_blog.html',{'form':form,'post':post})
+
+
+@login_required
+def delete_blog(request,post_slug):
+    blog  = PostModel.objects.get(slug=post_slug)
+    blog.delete()
+    return redirect('user_blogs')
