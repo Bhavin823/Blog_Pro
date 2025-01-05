@@ -6,11 +6,20 @@ from django.contrib.auth import authenticate,login ,logout
 from django.core.paginator import Paginator
 from user_app.models import UserProfileModel
 from django.utils.timezone import now
-from django.db.models import F,Count
+from django.db.models import F,Count,Q
 from dateutil.relativedelta import relativedelta
 from .models import contactModel,subscriptionModel
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.contrib.auth.decorators import login_required
+import json
+import requests
+from django.conf import settings
 # Create your views here.
 
+# brevo email marketing configure
+BREVO_API_KEY = settings.BREVO_API_KEY
 
 def get_trending_post():
     one_month_ago = now().date() - relativedelta(months=1)  # Define the time frame as 1 month ago
@@ -21,10 +30,7 @@ def get_trending_post():
         .order_by('-trend_score')[:4]  # Sort by trend score in descending order
     return trending_posts
 
-
-
 def BASE(request):
-    
     return render(request,'Main/base.html')
 
 def INDEX(request):
@@ -88,7 +94,6 @@ def CategoryView(request):
         'page':page,
     }
     return render(request,'category.html',context)
-
 
 def PostsByCategoryView(request,categoryName):
     # print("categoryName:",categoryName)
@@ -209,12 +214,80 @@ def handelSignup(request):
         password1 = request.POST['password1']
         password2 = request.POST['password2']
 
+
+        # Validate email format
+        try:
+            validate_email(email)
+        except ValidationError:
+            return render(request, 'loginsignup.html', {'messagekey': "Invalid email address"})
+        
+        if subscriptionModel.objects.filter(email=email).exists():
+            return render(request, 'loginsignup.html', {'messagekey': "Already Subscribed"})
+        
+
+
+        transactional_email_api = "https://api.brevo.com/v3/smtp/email"
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "api-key": BREVO_API_KEY,
+        }
+
+        # Email sending payload
+        email_payload = {
+            "sender": {
+                "name": "Katen",  # Replace with environment variable or config
+                "email": "backvin91@gmail.com"  # Replace with environment variable or config
+            },
+            "to": [
+                {"email": email}
+            ],
+            "templateId": 7,
+            "subject": "Welcome to Katen"
+        }
+
         if password1==password2:
             data = User.objects.all().filter(email=email) | User.objects.all().filter(username=username)
             if len(data)<=0:
-                myuser = User.objects.create_user(username, email, password1)
-                myuser.save()
-                return redirect('home')
+                User.objects.create_user(username, email, password1)
+
+                # send welcome email
+                email_response = requests.post(transactional_email_api, json=email_payload, headers=headers)
+                if email_response.status_code != 201:
+                    raise Exception(f"Email sending failed: {email_response.text}")
+
+                # check email is in subcription list or not
+                try:
+                    new_email = subscriptionModel.objects.get(email=email)
+                except subscriptionModel.DoesNotExist:
+                    all_event_email_api = "https://api.brevo.com/v3/smtp/statistics/events"
+                    headers = {
+                            "accept": "application/json",
+                            "content-type": "application/json",
+                            "api-key": BREVO_API_KEY,
+                        }
+                    data = requests.get(all_event_email_api,headers=headers)
+                    invalid_email = []
+                    event_responce = data.json()
+                    for event in event_responce["events"]:
+                        if event["event"] in ["hardBounces","softBounces"]:
+                            invalid_email.append(event["email"])
+                    if email not in invalid_email:
+                        # create contact and add in list
+                        contact_creation_and_add_to_list_api = "https://api.brevo.com/v3/contacts"
+                        contact_payload  = {
+                                "updateEnabled": False,  # Set to True if you want to update existing contacts
+                                "listIds": [2],
+                                "email": email,
+                            }
+                        with transaction.atomic():
+                            new_email = subscriptionModel.objects.create(email=email)
+                            new_email.save()
+                            # create a contact add to specified list in bravo
+                            contact_response = requests.post(contact_creation_and_add_to_list_api, json=contact_payload, headers=headers)
+                            if contact_response.status_code != 201:
+                                raise Exception(f"Contact creation failed: {contact_response.text}")
+                return render(request,'loginsignup.html',{'tab': "login",'messagekey':f"Welocome{username}"})
             else:   
                 return render(request,'loginsignup.html',{'messagekey':"User Already Exists"})
         else:
@@ -251,20 +324,24 @@ def searchView(request):
     if len(query) >= 78:
         releted_posts=PostModel.objects.none()
     else:
-        releted_post_title = PostModel.objects.filter(title__icontains=query)
-        releted_post_content = PostModel.objects.filter(content__icontains=query)
-        releted_posts = releted_post_title.union(releted_post_content)
+        releted_posts = (PostModel.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query)
+        )
+        .distinct()
+        .annotate(comment_count=Count('comments')
+        ))
     
     if releted_posts.count() == 0:
         return render(request,'search.html')
     
     # print(releted_posts.count())
+    
+
     context = {
         'releted_post' : releted_posts,
         'query' : query
     }
     return render(request,'search.html',context)
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def likeview(request,post_slug):
@@ -282,13 +359,12 @@ def likeview(request,post_slug):
 
     return redirect("postdetail", post_slug=post_slug)
 
-
+@login_required
 def profileView(request):
     return render(request,'profile.html')
 
 def about(request):
     return render(request,'about.html')
-
 
 def contact(request):
     return render(request,'contact.html')
@@ -312,12 +388,80 @@ def subscription(request):
 def addsubscription(request):
     if request.method == "POST":
         email = request.POST.get('email')
-
+        
+        if not email:
+            return render(request, 'subscription.html', {'messagekey': "Email is required"})
+        
+        # Validate email format
+        try:
+            validate_email(email)
+        except ValidationError:
+            return render(request, 'subscription.html', {'messagekey': "Invalid email address"})
+        
         if subscriptionModel.objects.filter(email=email).exists():
             return render(request, 'subscription.html', {'messagekey': "Already Subscribed"})
         
-        subscription = subscriptionModel.objects.create(email=email)
-        subscription.save()
+        # Create subscription and send email
+        transactional_email_api = "https://api.brevo.com/v3/smtp/email"
+        contact_creation_and_add_to_list_api = "https://api.brevo.com/v3/contacts"
 
-        
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "api-key": BREVO_API_KEY,
+        }
+
+        # Email sending payload
+        email_payload = {
+            "sender": {
+                "name": "Katen",  # Replace with environment variable or config
+                "email": "backvin91@gmail.com"  # Replace with environment variable or config
+            },
+            "to": [
+                {"email": email}
+            ],
+            "templateId": 7,
+            "subject": "Thank you for subscribing to Katen"
+        }
+
+        # contact creation and add to list payload
+        contact_payload  = {
+            "updateEnabled": False,  # Set to True if you want to update existing contacts
+            "listIds": [2],
+            "email": email,
+        }
+
+        try:
+            with transaction.atomic():
+                subscriptionModel.objects.create(email=email)
+                
+                # create a contact add to specified list in bravo
+                contact_response = requests.post(contact_creation_and_add_to_list_api, json=contact_payload, headers=headers)
+                if contact_response.status_code != 201:
+                    raise Exception(f"Contact creation failed: {contact_response.text}")
+
+                # send confirmation email
+                email_response = requests.post(transactional_email_api, json=email_payload, headers=headers)
+                if email_response.status_code != 201:
+                    raise Exception(f"Email sending failed: {email_response.text}")
+                
+        except Exception as e:
+            return render(request, 'subscription.html', {'messagekey': f"An error occurred: {str(e)}"})
+
         return render(request, 'subscription.html', {'messagekey': "Subscribed Successfully"})
+    
+def comigsoon(request):
+    return render(request,'comingsoon.html')
+
+from .forms import BlogPostForm
+
+@login_required
+def create_post(request):
+    if request.method == "POST":
+        form = BlogPostForm(request.POST, request.FILES if request.FILES else None)
+        if form.is_valid():
+            form.save(user=request.user)
+            return redirect('home')
+    else:
+        form = BlogPostForm()
+    return render(request,'create_post.html',{'form':form})      
