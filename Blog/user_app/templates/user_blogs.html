@@ -1,0 +1,122 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+{% block content %}
+{% load humanize %}
+
+    
+
+    <!-- section main content -->
+	<section class="main-content-lg" style="margin-top:0;">
+        <div class="container-minimal" style="max-width:700px;">
+            {% for i in blogs %}
+                <div class="post post-xl">
+                    <!-- post details -->
+                    <div class="post-top" style="padding:0px;">
+                        <ul class="meta list-inline mb-0">
+                            <li class="list-inline-item"><a href="#"><img src="{% static 'images/other/author-sm.png' %}" class="author" alt="author"/>{{i.author}}</a></li>
+                            {% comment %} <li class="list-inline-item">{{i.date}}</li> {% endcomment %}
+                            <li class="list-inline-item"><i class="icon-eye"></i> {{i.views}}</li>
+							<li class="list-inline-item"><i class="icon-heart"></i> {{ i.likes.count }}</li>
+							<li class="list-inline-item"><i class="icon-bubble"></i> {{ i.comments.count }}</li>
+                            <li class="list-inline-item"><i class="category-badge" style="color:white;">{{i.get_status_display}}</i></li>
+                            <div class="custom-dropdown-container">
+                                <li class="list-inline-item dropdown">
+                                    <i class="icon-options-vertical" onclick="toggleDropdown()"></i>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url "edit_blog" i.slug %}" class="dropdown-item">Edit</a></li>
+                                        <li><a href="{% url "delete_blog" i.slug %}"class="dropdown-item">Delete</a></li>
+                                    </ul>
+                                </li>
+                            </div>
+                        </ul>
+                        <h5 class="post-title mb-0 mt-4"><a href="{% url 'postdetail' i.slug %}">{{i.title}}</a></h5>
+                    </div>
+                    <!-- thumbnail -->
+                    <div class="thumb rounded">
+                        <a href="{% url 'postbycat' i.category.categoryName %}" class="category-badge lg position-absolute">{{i.category}}</a>
+                        <span class="post-format">
+                            <i class="icon-picture"></i>
+                        </span>
+                        <a href="{% url 'postdetail' i.slug %}">
+                            <div class="inner">
+                                <img src="{{i.post_image.url}}" alt="{{i.title}}" />
+                            </div>
+                        </a>
+                    </div>
+                    <!-- details -->
+                    <div class="details" style="padding: 50px 0px 50px;">
+                        <p class="excerpt mb-0">{{ i.content|truncatewords_html:60|safe }}</p>
+                    </div>
+                    <!--share icon-->
+                    <div class="post-bottom clearfix d-flex align-items-center" style="margin:0px;">
+                        <div class="social-share me-auto">
+                            <button class="toggle-button icon-share"></button>
+                            <ul class="icons list-unstyled list-inline mb-0">
+                                <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
+                                <li class="list-inline-item"><a href="#"><i class="far fa-envelope"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="float-end d-none d-md-block">
+                            <a href="{% url 'postdetail' i.slug %}" class="more-link">Continue reading<i class="icon-arrow-right"></i></a>
+                        </div>
+                        <div class="more-button d-block d-md-none float-end">
+                            <a href="{% url 'postdetail' i.slug %}" class="mobile-more-link" style="color:#FE4F70;">Continue reading<i class="icon-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- pagination -->
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">1</span>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    </ul>
+                </nav>
+                <!-- instagram feed -->
+                <div class="instagram">
+                    <div class="container-xl">
+                        <!-- button -->
+                        <a href="#" class="btn btn-default btn-instagram">@Katen on Instagram</a>
+                        <!-- images -->
+                        <div class="instagram-feed d-flex flex-wrap">
+                            <div class="insta-item col-sm-2 col-6 col-md-2">
+                                <a href="#">
+                                    <img src="{% static 'images/insta/insta-1.jpg' %}" alt="insta-title" />
+                                </a>
+                            </div>
+                            <div class="insta-item col-sm-2 col-6 col-md-2">
+                                <a href="#">
+                                    <img src="{% static 'images/insta/insta-2.jpg' %}" alt="insta-title" />
+                                </a>
+                            </div>
+                            <div class="insta-item col-sm-2 col-6 col-md-2">
+                                <a href="#">
+                                    <img src="{% static 'images/insta/insta-3.jpg' %}" alt="insta-title" />
+                                </a>
+                            </div>
+                            <div class="insta-item col-sm-2 col-6 col-md-2">
+                                <a href="#">
+                                    <img src="{% static 'images/insta/insta-4.jpg' %}" alt="insta-title" />
+                                </a>
+                            </div>
+                            <div class="insta-item col-sm-2 col-6 col-md-2">
+                                <a href="#">
+                                    <img src="{% static 'images/insta/insta-5.jpg' %}" alt="insta-title" />
+                                </a>
+                            </div>
+                            <div class="insta-item col-sm-2 col-6 col-md-2">
+                                <a href="#">
+                                    <img src="{% static 'images/insta/insta-6.jpg' %}" alt="insta-title" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{% endblock %}
