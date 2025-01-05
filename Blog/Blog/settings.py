@@ -12,18 +12,21 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+from .ckeditorconfig import *
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+from decouple import config
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ti!q@wg58hk66@0n3kur1h)=c%%s+3ll%18gwhuo(@3l65hw4t'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
@@ -37,10 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_ckeditor_5',
     'Blog_app',
     'user_app',
-    'ckeditor',
-    'ckeditor_uploader',
     'django.contrib.humanize'
 ]
 
@@ -127,7 +129,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Default primary key field type
@@ -135,56 +137,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# this config from Ckeditor
-from ckeditor.configs import DEFAULT_CONFIG
-
-CKEDITOR_UPLOAD_PATH = "blog_app/uploads/"
-CKEDITOR_IMAGE_BACKEND = "pillow"
-CKEDITOR_THUMBNAIL_SIZE = (300, 300)
-CKEDITOR_IMAGE_QUALITY = 40
-CKEDITOR_BROWSE_SHOW_DIRS = True
-CKEDITOR_ALLOW_NONIMAGE_FILES = True
-CKEDITOR_UPLOAD_SLUGIFY_FILENAME = False
-CKEDITOR_JQUERY_URL = 'http://libs.baidu.com/jquery/2.0.3/jquery.min.js'
-
-CUSTOM_TOOLBAR = [
-    {
-        "name": "document",
-        "items": [
-            "Styles", "Format", "Bold", "Italic", "Underline", "Strike", "-",
-            "TextColor", "BGColor",  "-",
-            "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock",
-        ],
-    },
-    {
-        "name": "widgets",
-        "items": [
-            "Undo", "Redo", "-",
-            "NumberedList", "BulletedList", "-",
-            "Outdent", "Indent", "-",
-            "Link", "Unlink", "-",
-            "Image", "CodeSnippet", "Table", "HorizontalRule", "Smiley", "SpecialChar", "-",
-            "Blockquote", "-",
-            "ShowBlocks", "Maximize",
-        ],
-    },
-]
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': (
-            ['div', 'Source', '-', 'Save', 'NewPage', 'Preview', '-', 'Templates'],
-            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Print', 'SpellChecker', 'Scayt'],
-            ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat'],
-            ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
-            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Link', 'Unlink', 'Anchor'],
-            ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'],
-            ['Styles', 'Format', 'Font', 'FontSize'],
-            ['TextColor', 'BGColor'],
-            ['Maximize', 'ShowBlocks', '-', 'About', 'pbckcode'],
-        ),
-    }
-}
+# Brevo API KEY (Email Service)
+BREVO_API_KEY = config('BREVO_API_KEY')
