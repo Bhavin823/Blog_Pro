@@ -3423,7 +3423,7 @@ button:focus {
 /* user_post option section */
 .custom-dropdown-container {
   display: inline-block;
-  margin-left: 36%;
+  margin-left: 35%;
 }
 
 /* Dropdown menu inside the custom container */
@@ -3473,4 +3473,68 @@ button:focus {
   .custom-dropdown-container {
     margin-left: 0;
   }
+}
+
+.view-product img{
+  display: block;
+  width: 100%;
+  border-radius: 50%; 
+  height: 80px; 
+  aspect-ratio: 1/1;  
+}
+
+.profile-greetings{
+  padding: 1rem 2.5rem;
+}
+
+/* .profile-hello{
+  font-size: 1rem;
+}
+
+.profile-username{
+  font-size:1.5rem;
+} */
+
+.brands-name{
+  padding:20px 0;
+}
+
+
+.user-icon{
+  padding-left: 30px;
+}
+
+.profile-account, .profile-logout{
+  padding: 0px;
+}
+
+.profile-logout a {
+    font-size: medium;
+    font-weight: 500;
+    margin-top: 4px;
+    color: #878787;
+    padding-left: 0px;
+}
+
+.logout-icon{
+  padding-left: 30px;
+}
+
+/* profile layout in 480px */ 
+@media (max-width:768px){
+  .view-product img{
+    width:35%;
+  }
+
+  .profile-account{
+    padding-left: 25px;
+  }
+  
+  .profile-option{
+    padding-left: 1.5rem;
+  }
+
+  .profile-logout a {
+        padding-left: 0.3rem;
+    }
 }
