@@ -1,0 +1,21 @@
+.ck-editor__editable_inline:not(.ck-comment__input *) {
+    height: 300px;
+    overflow-y: auto;    
+}
+
+.ck.ck-editor {
+    position: relative;
+    width: 1054px;
+    color: black !important;
+}
+
+.ck-powered-by{
+    display: none;
+}
+
+
+@media (max-width:768px){
+    .ck.ck-editor {
+        width: 100%;
+    }
+}
