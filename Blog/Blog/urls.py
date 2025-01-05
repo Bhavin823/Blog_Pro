@@ -21,11 +21,10 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    
     path('admin/', admin.site.urls),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
     path('', include('Blog_app.urls')),
     path('',include('user_app.urls')),
-    
 ]
 
 if settings.DEBUG:
