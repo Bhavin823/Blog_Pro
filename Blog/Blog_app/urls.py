@@ -12,6 +12,9 @@ urlpatterns = [
 
     # post
     path('postdetail/<slug:post_slug>/',views.PostdetailView,name='postdetail'),
+
+    # create Post
+    path('create_post',views.create_post,name='create_post'),
     
     # comment
     path('postdetail/<slug:post_slug>/postcomment/', views.postcomment, name='postcomment'),
