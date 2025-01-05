@@ -15,4 +15,13 @@ urlpatterns = [
 
     # update contact
     path('update_contact/', views.update_contact, name='update_contact'),
+
+    # user releted blogs
+    path('user_blogs/',views.user_blogs,name='user_blogs'),
+    
+    # handle edited blog post
+    path('edit/<slug:post_slug>/',views.edit_blog,name='edit_blog'),
+    
+    # delete blog post
+    path('delete_blog/<slug:post_slug>/',views.delete_blog,name='delete_blog'),
 ]
